@@ -63,7 +63,7 @@ http://127.0.0.1:8000/meat
 
 10. Описание моделей храниться в файле models.py
 
-11. Для регистрации нового пользовователя используем следующий url:
+11. Для регистрации нового пользовователя используем следующий url, метод POST:
     http://127.0.0.1:8000/meat/register
 
     body:
@@ -84,7 +84,8 @@ http://127.0.0.1:8000/meat
     }
 }
 
-12. Для авторизации авторизация http://127.0.0.1:8000/meat/login
+12. Для авторизации авторизация http://127.0.0.1:8000/meat/login, метод POST:
+^
 С телом запроса 
 {
     "phone":"89612345678"
@@ -99,7 +100,7 @@ http://127.0.0.1:8000/meat
     }
 }
 
-13. Получение токена используя basic authentification:
+13. Получение токена используя basic authentification, метод POST:
 http://127.0.0.1:8000/api-token-auth/
 , тело запроса
 {
@@ -107,7 +108,7 @@ http://127.0.0.1:8000/api-token-auth/
     "password":"12345@34"
 }
 
-14. получить список всех товаров http://127.0.0.1:8000/meat/products/.
+14. получить список всех товаров, метод GET: http://127.0.0.1:8000/meat/products/.
 Обязательно использовать токен для авторизации, добавив в заголоцки
 key: Authorization, value:token 9b6602fcb0e0621d4e98fa30b62241c22c598587
 
@@ -259,12 +260,92 @@ response:
     }
 ]
 
-15. Получение списка заказов пользователя http://127.0.0.1:8000/meat/orders?user=1
+15. Получение списка заказов пользователя, метод GET: http://127.0.0.1:8000/meat/orders?user_id=1
 user является параметром не обязательным, если его убрать получим все заказы
 
-16. 
+16. Оформление заказа http://127.0.0.1:8000/meat/orders, метод POST:
+Body:
+{       
+    "user": 1, 
+    "first_name": "order7",
+    "last_name": "or7",
+    "email": "test3666@gmail.com",
+    "address": "73 Волжская",
+    "postal_code": "350059",
+    "city": "Краснодар",
+    "created": "2025-07-25T12:39:26.860770Z",
+    "updated": "2025-07-25T12:39:26.860780Z",
+    "paid": false,
+    "items": [
+        {            
+            "price": "100.00",
+            "quantity": 2,
+            "product": {                       
+                "title": "meat2",
+                "description": "t2222dw",
+                "price": "100",
+                "availability": true,
+                "category": "http://127.0.0.1:8000/meat/category/1"
+            }
+        },
+        {            
+            "price": "135.00",
+            "quantity": 1,
+            "product": {                   
+                "title": "meat4",
+                "description": "testaaa",
+                "price": "10",
+                "availability": true,
+                "category": "http://127.0.0.1:8000/meat/category/1"
+            }
+        }
+    ]
+}
+, после создания получаем response:
+{
+    "id": 42,
+    "first_name": "order7",
+    "last_name": "or7",
+    "email": "test3666@gmail.com",
+    "address": "73 Волжская",
+    "postal_code": "350059",
+    "city": "Краснодар",
+    "created": "2025-07-27T12:57:58.111927Z",
+    "updated": "2025-07-27T12:57:58.143119Z",
+    "paid": false,
+    "total": "335.00",
+    "user": 1,
+    "items": [
+        {
+            "id": 32,
+            "price": "100.00",
+            "quantity": 2,
+            "product": {
+                "id": 17,
+                "title": "meat2",
+                "description": "t2222dw",
+                "price": "100.00",
+                "availability": true,
+                "category": "http://127.0.0.1:8000/meat/category/1"
+            }
+        },
+        {
+            "id": 33,
+            "price": "135.00",
+            "quantity": 1,
+            "product": {
+                "id": 18,
+                "title": "meat4",
+                "description": "testaaa",
+                "price": "10.00",
+                "availability": true,
+                "category": "http://127.0.0.1:8000/meat/category/1"
+            }
+        }
+    ]
+}
 
-
-
+17. Описал кратко, всё могу рассказать и показать на созвоне.
+Архитектуру бд и самого проекта.
 
 
