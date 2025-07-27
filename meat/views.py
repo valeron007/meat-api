@@ -24,7 +24,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         print(self.request.query_params)
-        user = self.request.query_params.get('user')
+        user = self.request.query_params.get('user_id')
         if user is not None:            
             return self.queryset.filter(user=user)
                     
@@ -49,10 +49,9 @@ class UserViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 @permission_classes((permissions.AllowAny,))
 def login(request):    
-    user = get_object_or_404(User, phone=request.data['phone'])
-           
-    token = Token.objects.get_or_create(user=user)
-    seserializer = UserSerializer(instance=user)
+    user = get_object_or_404(User, phone=request.data['phone'])           
+    token, created = Token.objects.get_or_create(user=user)
+    seserializer = UserSerializer(instance=user)        
     return Response({"token":token.key, "user":seserializer.data})
 
 @api_view(['POST'])
