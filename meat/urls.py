@@ -1,11 +1,23 @@
 from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet, UserViewSet, CategoryViewSet, OrderViewSet
+from .views import ProductViewSet, UserViewSet, CategoryViewSet, OrderViewSet, OrderItemViewSet
 from . import views
 
 router = DefaultRouter()
 router.register(r'products', ProductViewSet)
 router.register(r'users', UserViewSet)
+
+order_item_list = OrderItemViewSet.as_view({
+    'get': 'list', 
+    'post': 'create'
+})
+
+order_item_detail = OrderItemViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
 
 order_list = OrderViewSet.as_view({
     'get': 'list', 
@@ -35,9 +47,12 @@ urlpatterns = [
     path('', include(router.urls)),    
     re_path('register', views.register),
     re_path('test_token', views.test_token),
+    
     re_path('login', views.login),
     path('category', category_list, name='category-list'),
     path('category/<int:pk>', category_detail, name='category-detail'),
     path('orders', order_list, name='order-list'),
     path('orders/<int:pk>', order_detail, name='order-detail'),
+    path('order-items', order_item_list, name='order-item-list'),
+    path('order-items/<int:pk>', order_item_detail, name='order-item-detail'),    
 ]

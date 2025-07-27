@@ -1,5 +1,6 @@
 from django.db import models
 # Create your models here.
+from django.db.models import Sum, F
 from django.db import models
 from phone_field import PhoneField
 from django.contrib.auth.models import AbstractUser
@@ -41,7 +42,18 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
-
+    total = models.DecimalField(default=0.0, max_digits=20, decimal_places=2)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    
+    def set_total(self):        
+        total = OrderItem.objects.filter(order=self.id).aggregate(total=Sum(F('price')*F('quantity')))
+        self.total = total['total']
+        self.save()
+        print(total)
+        
+    def get_total(self):
+        return self.total
+    
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='order_items', on_delete=models.PROTECT)
@@ -51,7 +63,5 @@ class OrderItem(models.Model):
     def __str__(self):
         return '{}'.format(self.id)
 
-    def get_cost(self):
-        return self.price * self.quantity
     
     
